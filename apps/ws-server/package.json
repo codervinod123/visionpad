@@ -4,10 +4,12 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "start": "node dist/index.js",
+    "start": "nodemon dist/index.js",
     "dev": "npm run build && npm run start"
   },
   "dependencies": {
+    "@types/nodemon": "^1.19.6",
+    "nodemon": "^3.1.9",
     "ws": "^8.18.0"
   },
   "devDependencies": {
