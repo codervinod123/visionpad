@@ -1,0 +1,21 @@
+import { UserRepository } from "../repository/user-repository";
+const userRepository = new UserRepository();
+
+class UserServices{
+    constructor(){}
+
+    async SignUp(data:any){
+       try {
+          const response = await userRepository.SignUp(data);
+          return response;
+       } catch (error) {
+         console.log("Eoor has occured at user controller");
+         throw error;
+       } 
+    }
+
+};
+
+export {
+    UserServices
+}
