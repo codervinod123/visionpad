@@ -14,6 +14,16 @@ class UserServices{
        } 
     }
 
+    async SignIn(data:any){
+        try {
+           const response = await userRepository.SignIn(data);
+           return response;
+        } catch (error) {
+          console.log("Eoor has occured at user controller");
+          throw error;
+        } 
+     }
+
 };
 
 export {

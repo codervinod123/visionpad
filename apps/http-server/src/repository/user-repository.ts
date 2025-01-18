@@ -19,7 +19,27 @@ class UserRepository{
            throw error;
         }
     }
-    
+
+    async SignIn(data:any){
+        try {
+            const user = await prismaClient.user.findUnique({where:{email: data.email}});
+            if(!user){
+                throw {Error: "User does't exist"};
+            }
+            const isMatchpassword = bcrypt.compareSync(data.password, user.password);
+            if(!isMatchpassword){
+                throw {Error: "Pawword doe't match"};
+            }
+            const jwtToken = jwt.sign({ id: user?.id }, JWT_SECRET);
+            console.log("token", jwtToken);
+            console.log("User", user);
+            return  jwtToken;
+        } catch (error) {
+           console.log("Eoor has occured at repository controller");
+           throw error;
+        }
+    }
+
 }
 
 

@@ -1,6 +1,7 @@
-import { SignUp } from "./user-controllesr";
+import { SignUp, SignIn } from "./user-controllesr";
 
 
 export {
-    SignUp
+    SignUp,
+    SignIn
 }
