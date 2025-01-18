@@ -1,7 +1,8 @@
-import { SignUp, SignIn } from "./user-controllesr";
+import { SignUp, SignIn, JoinRoom } from "./user-controllesr";
 
 
 export {
     SignUp,
-    SignIn
+    SignIn,
+    JoinRoom
 }

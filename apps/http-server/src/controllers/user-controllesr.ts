@@ -34,3 +34,19 @@ export const SignIn = async (req: any, res: any) => {
     }
 }
 
+export const JoinRoom = async (req: any, res: any) => {
+    try {
+        const roomId = req.query.roomId;
+        const user = await userServices.JoinRoom(roomId); 
+        res.status(200).json({
+            message: "Joined the room successfully",
+            user: user,
+        });
+    } catch (error) {
+        res.status(400).json({
+            message:"can't join room",
+            err: error
+        })
+    }
+}
+

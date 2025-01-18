@@ -41,6 +41,15 @@ class UserRepository{
         }
     }
 
+    async JoinRoom(roomId:any){
+        try {
+           return roomId;
+        } catch (error) {
+           console.log("Eoor has occured at repository controller");
+           throw error;
+        }
+    }
+
 }
 
 

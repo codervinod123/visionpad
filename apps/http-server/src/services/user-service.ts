@@ -24,6 +24,16 @@ class UserServices{
         } 
      }
 
+     async JoinRoom(roomId:any){
+        try {
+           const response = await userRepository.JoinRoom(roomId);
+           return response;
+        } catch (error) {
+          console.log("Eoor has occured at user controller");
+          throw error;
+        } 
+     }
+
 };
 
 export {
