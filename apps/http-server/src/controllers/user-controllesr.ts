@@ -11,8 +11,10 @@ export const SignUp = async (req: any, res: any) => {
             user: user,
         });
     } catch (error) {
-      console.log("Eoor has occured at user controller");
-      throw error;
+        res.status(400).json({
+            message:"can't signup successfully",
+            err: error
+        })
     }
 }
 
@@ -25,8 +27,10 @@ export const SignIn = async (req: any, res: any) => {
             user: user,
         });
     } catch (error) {
-      console.log("Eoor has occured at user controller");
-      throw error;
+        res.status(400).json({
+            message:"can't signin successfully",
+            err: error
+        })
     }
 }
 
