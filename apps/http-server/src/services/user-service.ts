@@ -1,4 +1,4 @@
-import { UserRepository } from "../repository/user-repository";
+import { UserRepository } from "../repository";
 const userRepository = new UserRepository();
 
 class UserServices{

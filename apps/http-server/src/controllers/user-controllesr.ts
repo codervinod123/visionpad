@@ -2,7 +2,7 @@ import { prismaClient } from "@repo/db/prismaClient";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/backend-common/config";
 import bcrypt from "bcrypt";
-import { UserServices } from "../services/user-service";
+import { UserServices } from "../services";
 
 const userServices = new UserServices();
 
