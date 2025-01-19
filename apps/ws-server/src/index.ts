@@ -10,6 +10,33 @@ interface User{
 
 const users:User[]=[];
 
+const sendMessage=(parsedMessage:any, ws:any, userId:any)=>{
+  if( parsedMessage.type === "join_room" ){
+    const user = users.find(user=>user.userId==userId);
+    user?.rooms.push(parsedMessage.roomid);
+ }
+
+ if( parsedMessage.type === "leave_room" ){
+   const user = users.find(user=>user.ws===ws);
+   if(!user) return;
+   user.rooms = user.rooms.filter(room=>parsedMessage.roomid != room);
+ }
+
+
+ if( parsedMessage.type === "chat" ){
+   const user = users.find(user=>user.ws===ws);
+   if(!user) return;
+   user.rooms.map((roomid)=>{
+       users.map((user)=>{
+           if(user.rooms.includes(roomid)){
+             user.ws.send(parsedMessage.message);
+           }
+       })
+   }) 
+ }
+  
+}
+
 wss.on("connection", function connection(ws:WebSocket, request){
     const urlParams = new URLSearchParams(request?.url?.split("?")[1])
     const userId = urlParams.get("userid");
@@ -24,32 +51,7 @@ wss.on("connection", function connection(ws:WebSocket, request){
 
     ws.on("message", (message)=>{
        const parsedMessage = JSON.parse(message.toString());
-       
-      if( parsedMessage.type === "join_room" ){
-         const user = users.find(user=>user.userId==userId);
-         user?.rooms.push(parsedMessage.roomid);
-      }
-
-      if( parsedMessage.type === "leave_room" ){
-        const user = users.find(user=>user.ws===ws);
-        if(!user) return;
-        user.rooms = user.rooms.filter(room=>parsedMessage.roomid != room);
-      }
-
-
-      if( parsedMessage.type === "chat" ){
-        const user = users.find(user=>user.ws===ws);
-        if(!user) return;
-        user.rooms.map((roomid)=>{
-            users.map((user)=>{
-                if(user.rooms.includes(roomid)){
-                  user.ws.send("Hello Bhai");
-                }
-            })
-        }) 
-      }
-       
-
+       sendMessage(parsedMessage, ws, userId);
     })
 
 })
