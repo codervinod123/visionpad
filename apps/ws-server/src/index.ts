@@ -1,20 +1,31 @@
 import { WebSocket, WebSocketServer } from "ws";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import {prismaClient} from "@repo/db/prismaClient";
 
 const wss = new WebSocketServer({port:8100});
 
 interface User{
    userId:   string | null,
-   rooms:    string[],
+   rooms:    number[],
    ws:       WebSocket
 };
 
 const users:User[]=[];
 
-const sendMessage=(parsedMessage:any, ws:any, userId:any)=>{
-  if( parsedMessage.type === "join_room" ){
-    const user = users.find(user=>user.userId==userId);
-    user?.rooms.push(parsedMessage.roomid);
+const sendMessage=async(parsedMessage:any, ws:any, userId:any)=>{
+ 
+ if( parsedMessage.type === "join_room" ){
+    
+  console.log("Joining rooomm");
+  const response = await prismaClient.room.create({
+    data:{
+      adminid: Number(userId)
+    }
+   });
+   console.log("room details", response);
+   if(!response) return;
+   const user = users.find(user=>user.userId==userId);
+   user?.rooms.push(response.id);
  }
 
  if( parsedMessage.type === "leave_room" ){
@@ -33,7 +44,17 @@ const sendMessage=(parsedMessage:any, ws:any, userId:any)=>{
              user.ws.send(parsedMessage.message);
            }
        })
-   }) 
+   });
+   
+   const response = await prismaClient.chat.create({
+      data:{
+        message:  parsedMessage.message,
+        roomId:   Number(parsedMessage.roomid),
+        senderId: Number(userId)
+      }
+   });
+   console.log(response);
+
  }
   
 }
@@ -52,8 +73,6 @@ wss.on("connection", function connection(ws:WebSocket, request){
       rooms: [],
       ws: ws
     });
-
-    console.log(users);
 
     ws.on("message", (message)=>{
        const parsedMessage = JSON.parse(message.toString());
