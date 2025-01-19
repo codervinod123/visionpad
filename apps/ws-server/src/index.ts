@@ -1,14 +1,154 @@
-import { WebSocketServer } from "ws"
+import { WebSocket, WebSocketServer } from "ws";
 
-const wss = new WebSocketServer({port: 8400});
+const wss = new WebSocketServer({port:8100});
 
-wss.on("connection", (ws: any)=>{
+interface User{
+   userId:   string,
+   rooms:    string[],
+   ws:       WebSocket
+};
 
-     ws.on("message",(message: string)=>{
-       console.log("Hello i have get", message)
-     })
+const users:User[]=[];
 
-     
+wss.on("connection", function connection(ws:WebSocket, request){
+    const urlParams = new URLSearchParams(request?.url?.split("?")[1])
+    const userId = urlParams.get("userid");
+    
+    if(!userId) return;
+   
+    users.push({
+      userId: userId,
+      rooms: [],
+      ws: ws
+    });
+
+    ws.on("message", (message)=>{
+       const parsedMessage = JSON.parse(message.toString());
+       
+      if( parsedMessage.type === "join_room" ){
+         const user = users.find(user=>user.userId==userId);
+         user?.rooms.push(parsedMessage.roomid);
+      }
+
+      if( parsedMessage.type === "leave_room" ){
+        const user = users.find(user=>user.ws===ws);
+        if(!user) return;
+        user.rooms = user.rooms.filter(room=>parsedMessage.roomid != room);
+      }
+
+
+      if( parsedMessage.type === "chat" ){
+        const user = users.find(user=>user.ws===ws);
+        if(!user) return;
+        user.rooms.map((roomid)=>{
+            users.map((user)=>{
+                if(user.rooms.includes(roomid)){
+                  user.ws.send("Hello Bhai");
+                }
+            })
+        }) 
+      }
+       
+
+    })
+
 })
 
-console.log("Testing the socket server appp");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { WebSocket, WebSocketServer } from "ws"
+// const wss = new WebSocketServer({port: 8400});
+
+
+// interface User{
+//   userId:    string,
+//   rooms:     string[],
+//   ws: WebSocket
+// }
+
+// const users:User[]=[];
+
+// wss.on("connection", (ws: WebSocket,  request)=>{
+
+//      const url = request.url;
+//      if(!url) return;
+     
+//      const searchParams =new URLSearchParams(url.split("?")[1]);
+//      const userId = searchParams?.get('room') || "";
+     
+     
+//      users.push({
+//       userId: userId,
+//       rooms:  [],   
+//       ws: ws
+//     })
+
+
+//      ws.on("message",(data)=>{
+       
+//       const parsedData = JSON.parse(data as unknown as string);
+
+//       // if a user wants to join a room
+//       if(parsedData.type === "join_room"){
+//          users.map((user)=>{
+//            if(user.ws==ws){
+//             user.rooms.push(parsedData.roomid);
+//            }
+//          })
+//       }
+
+//       if(parsedData.type === "leave_room"){
+//         const user = users.find(x=>x.ws===ws);
+//         if(!user) return;
+//         user.rooms =  user.rooms.filter(room=>parsedData.roomid!=room);
+//       }
+
+//       if(parsedData.type === "chat"){
+//          users.map((user)=>{
+//             user.rooms.map((room)=>{
+//                if(room=parsedData.roomid){
+//                 user.ws.send(parsedData.message);
+//                }
+//             })
+//          })
+//       }
+
+
+//       console.log("Usersss", users);
+      
+
+
+//      }) 
+     
+     
+// })
+
+// console.log("Testing the socket server appp");
