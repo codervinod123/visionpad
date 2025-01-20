@@ -34,20 +34,33 @@ class UserRepository{
             const jwtToken = jwt.sign({ id: user?.id }, JWT_SECRET);
             console.log("token", jwtToken);
             console.log("User", user);
-            return  jwtToken;
+            return  {user, jwtToken};
         } catch (error) {
            console.log("Eoor has occured at repository controller");
            throw error;
         }
     }
 
-    async JoinRoom(adminid:any){
-        try {
-           console.log("admin iddd", adminid);
-           const response = await prismaClient.room.create({data:{adminid:Number(adminid)}});
+    async JoinRoom(token:any){
+        try { 
+           console.log("admin iddd", token);
+           const user = jwt.verify(token, JWT_SECRET)
+           if(!user) return;
+           const parsedData = new URLSearchParams(user);
+           const useId = parsedData.get('id');
+           const response = await prismaClient.room.create({data:{slug:"web dev cohort", adminid:Number(useId)}});
            return response;
         } catch (error) {
-            console.log("admin iddd", adminid);
+           console.log("Eoor has occured at repository controller");
+           throw error;
+        }
+    }
+
+    async GetRoom(){
+        try { 
+           const response = await prismaClient.room.findMany();
+           return response;
+        } catch (error) {
            console.log("Eoor has occured at repository controller");
            throw error;
         }

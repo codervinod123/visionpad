@@ -24,15 +24,25 @@ class UserServices{
         } 
      }
 
-     async JoinRoom(roomId:any){
+     async JoinRoom(token:any){
         try {
-           const response = await userRepository.JoinRoom(roomId);
+           const response = await userRepository.JoinRoom(token);
            return response;
         } catch (error) {
           console.log("Eoor has occured at user controller");
           throw error;
         } 
      }
+
+     async GetRoom(){
+      try {
+         const response = await userRepository.GetRoom();
+         return response;
+      } catch (error) {
+        console.log("Eoor has occured at user controller");
+        throw error;
+      } 
+   }
 
 };
 

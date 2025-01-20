@@ -25,6 +25,7 @@ model User {
 
 model Room {
   id           Int @id @default(autoincrement())
+  slug         String
   adminid      Int
   admin        User @relation(fields: [adminid], references: [id])
   chats        Chat[]

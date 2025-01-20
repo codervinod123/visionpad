@@ -36,11 +36,27 @@ export const SignIn = async (req: any, res: any) => {
 
 export const JoinRoom = async (req: any, res: any) => {
     try {
-        const roomId = req.query.roomId;
-        const user = await userServices.JoinRoom(roomId); 
+        const token = req.headers.token 
+        const user = await userServices.JoinRoom(token); 
         res.status(200).json({
             message: "Joined the room successfully",
             user: user,
+        });
+    } catch (error) {
+        res.status(400).json({
+            message:"can't join room",
+            err: error
+        })
+    }
+}
+
+
+export const GetRoom = async (req: any, res: any) => {
+    try {
+        const user = await userServices.GetRoom(); 
+        res.status(200).json({
+            message: "fetched all room successfully",
+            rooms: user,
         });
     } catch (error) {
         res.status(400).json({
