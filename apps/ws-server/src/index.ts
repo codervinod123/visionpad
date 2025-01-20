@@ -61,13 +61,15 @@ const sendMessage=async(parsedMessage:any, ws:any, userId:any)=>{
 }
 
 wss.on("connection", function connection(ws:WebSocket, request){
+
     const urlParams = new URLSearchParams(request?.url?.split("?")[1]);
     const token = urlParams.get("userid")
     if(!token) return
     const data = jwt.verify(token, "vinodpr");
     if(!data) return;
-    const parassss =new URLSearchParams(data);
-    const userId = parassss.get("id");
+    const parsedData =new URLSearchParams(data);
+    const userId = parsedData.get("id");
+
     
     users.push({
       userId: userId,

@@ -15,6 +15,8 @@ const page = () => {
       console.log("Room joined", roomDetails);
       router.push(`/chat/${room}`);
   }
+  
+  
 
   return (
     <div style={{ height:"100vh", width:"100vw", display:"flex", justifyContent:"center", alignItems:"center"}}>

@@ -12,6 +12,13 @@ const Messages = () => {
         console.log("Data from backend", data.data);
     }
 
+    // creating connection to the websocket server
+    useEffect(()=>{
+        const wss = new WebSocket(`ws://localhost:8100?userid=${localStorage.getItem("token")}`);
+        console.log(wss);
+    },[])
+
+
   return (
     <div style={{ height:"100vh", width:"100vw", margin:"20px", display:"flex",flexDirection:"column", gap:"10px", justifyContent:"center", alignItems:"center"}}>
           <div style={{height:"80vh", width:"100vw", display:"flex", flexDirection:"column", overflowY:"auto" , border:"1px solid red"}}>
