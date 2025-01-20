@@ -41,10 +41,13 @@ class UserRepository{
         }
     }
 
-    async JoinRoom(roomId:any){
+    async JoinRoom(adminid:any){
         try {
-           return roomId;
+           console.log("admin iddd", adminid);
+           const response = await prismaClient.room.create({data:{adminid:Number(adminid)}});
+           return response;
         } catch (error) {
+            console.log("admin iddd", adminid);
            console.log("Eoor has occured at repository controller");
            throw error;
         }
