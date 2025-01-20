@@ -20,6 +20,11 @@ const page = ({ params }: any) => {
     console.log(response.data.rooms);
   }
 
+  const nabigateMessages=(roomid:any)=>{
+     localStorage.setItem("room", roomid);
+     router.push("/messages");
+  }
+
 
   return (
     <div style={{ display: "flex", flexWrap:"wrap", padding: "50px", justifyContent:"center", gap: "1em" }}>
@@ -28,9 +33,9 @@ const page = ({ params }: any) => {
           return (
             <div key={index} style={{ height: "200px", width: "200px", border: "1px solid white", borderRadius: "5px", background: "#4C585B", padding: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
               <span>{room.slug}</span>
-              <Link href={`/messages?roomid=${room.id}`}>
-                <button style={{ padding: "8px 20px", background: "green", borderRadius: "5px", border: "none", cursor: "pointer", margin: "10px" }}>Join</button>
-              </Link> 
+              {/* <Link href={`/messages?roomid=${room.id}`}> */}
+              <button onClick={()=>nabigateMessages(room.id)} style={{ padding: "8px 20px", background: "green", borderRadius: "5px", border: "none", cursor: "pointer", margin: "10px" }}>Join</button>
+              {/* </Link>  */}
             </div>
           )
         })

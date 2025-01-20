@@ -54,7 +54,7 @@ const sendMessage=async(parsedMessage:any, ws:any, userId:any)=>{
         senderId: Number(userId)
       }
    });
-   console.log(response);
+   console.log("message createddd", response);
 
  }
   
@@ -78,7 +78,10 @@ wss.on("connection", function connection(ws:WebSocket, request){
     });
 
     ws.on("message", (message)=>{
+        // console.log("Message recived by client", message.toString());
+        // return;
        const parsedMessage = JSON.parse(message.toString());
+       console.log("Parsed message", parsedMessage);
        sendMessage(parsedMessage, ws, userId);
     })
 

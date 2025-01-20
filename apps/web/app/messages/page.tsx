@@ -1,8 +1,10 @@
 "use client"
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect , useState} from "react";
 const Messages = () => {
    
+    const [ws, setWs] = useState<any | null>(null);
+    const [message, setMessage] = useState<string>("");
     useEffect(()=>{
        getMessages();
     },[]);
@@ -14,10 +16,23 @@ const Messages = () => {
 
     // creating connection to the websocket server
     useEffect(()=>{
-        const wss = new WebSocket(`ws://localhost:8100?userid=${localStorage.getItem("token")}`);
-        console.log(wss);
+        cwssConnection();
     },[])
+    
+    const cwssConnection=async ()=>{
+        console.log(localStorage.getItem("room"));
+        const wss = new WebSocket(`ws://localhost:8100?userid=${localStorage.getItem("token")}`);
+        setWs(wss);
+    }
 
+
+
+   const sendMessage=()=>{
+        ws.send(JSON.stringify({
+            "type":"chat",
+            "message":message, 
+            "roomid":localStorage.getItem("room")}));
+   }
 
   return (
     <div style={{ height:"100vh", width:"100vw", margin:"20px", display:"flex",flexDirection:"column", gap:"10px", justifyContent:"center", alignItems:"center"}}>
@@ -27,7 +42,8 @@ const Messages = () => {
              }
           </div>
          <div style={{width:"100%", border:"1px solid white"}}>
-          <input style={{padding:"5px", width:"100%"}} type="text" />
+          <input onChange={(e)=>setMessage(e.target.value)} value={message} style={{padding:"5px", width:"100%"}} type="text" />
+          <button onClick={sendMessage}>Send Mssage</button>
          </div>
     </div>
   );
