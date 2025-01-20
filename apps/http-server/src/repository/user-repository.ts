@@ -41,14 +41,13 @@ class UserRepository{
         }
     }
 
-    async JoinRoom(token:any){
+    async JoinRoom(token:any, slug:any){
         try { 
-           console.log("admin iddd", token);
            const user = jwt.verify(token, JWT_SECRET)
            if(!user) return;
            const parsedData = new URLSearchParams(user);
-           const useId = parsedData.get('id');
-           const response = await prismaClient.room.create({data:{slug:"web dev cohort", adminid:Number(useId)}});
+           const useId:Number = Number(parsedData.get('id'));
+           const response = await prismaClient.room.create({data:{slug: slug, adminid:Number(useId)}});
            return response;
         } catch (error) {
            console.log("Eoor has occured at repository controller");

@@ -37,7 +37,8 @@ export const SignIn = async (req: any, res: any) => {
 export const JoinRoom = async (req: any, res: any) => {
     try {
         const token = req.headers.token 
-        const user = await userServices.JoinRoom(token); 
+        const slug = req.query.slug;
+        const user = await userServices.JoinRoom(token, slug); 
         res.status(200).json({
             message: "Joined the room successfully",
             user: user,

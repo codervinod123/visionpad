@@ -19,6 +19,7 @@ const sendMessage=async(parsedMessage:any, ws:any, userId:any)=>{
   console.log("Joining rooomm");
   const response = await prismaClient.room.create({
     data:{
+      slug: "fff",
       adminid: Number(userId)
     }
    });
@@ -80,102 +81,3 @@ wss.on("connection", function connection(ws:WebSocket, request){
     })
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { WebSocket, WebSocketServer } from "ws"
-// const wss = new WebSocketServer({port: 8400});
-
-
-// interface User{
-//   userId:    string,
-//   rooms:     string[],
-//   ws: WebSocket
-// }
-
-// const users:User[]=[];
-
-// wss.on("connection", (ws: WebSocket,  request)=>{
-
-//      const url = request.url;
-//      if(!url) return;
-     
-//      const searchParams =new URLSearchParams(url.split("?")[1]);
-//      const userId = searchParams?.get('room') || "";
-     
-     
-//      users.push({
-//       userId: userId,
-//       rooms:  [],   
-//       ws: ws
-//     })
-
-
-//      ws.on("message",(data)=>{
-       
-//       const parsedData = JSON.parse(data as unknown as string);
-
-//       // if a user wants to join a room
-//       if(parsedData.type === "join_room"){
-//          users.map((user)=>{
-//            if(user.ws==ws){
-//             user.rooms.push(parsedData.roomid);
-//            }
-//          })
-//       }
-
-//       if(parsedData.type === "leave_room"){
-//         const user = users.find(x=>x.ws===ws);
-//         if(!user) return;
-//         user.rooms =  user.rooms.filter(room=>parsedData.roomid!=room);
-//       }
-
-//       if(parsedData.type === "chat"){
-//          users.map((user)=>{
-//             user.rooms.map((room)=>{
-//                if(room=parsedData.roomid){
-//                 user.ws.send(parsedData.message);
-//                }
-//             })
-//          })
-//       }
-
-
-//       console.log("Usersss", users);
-      
-
-
-//      }) 
-     
-     
-// })
-
-// console.log("Testing the socket server appp");

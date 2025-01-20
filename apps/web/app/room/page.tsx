@@ -1,7 +1,6 @@
 "use client"
 import React from 'react';
 import { useState } from 'react';
-import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
 
@@ -12,7 +11,7 @@ const page = () => {
   const [room, setRoom] = useState("");
 
   const joinRoom=async()=>{
-      const roomDetails = await axios.post(`http://localhost:3100/api/v1/user/joinroom`, {} , {headers:{token:localStorage.getItem("token")}});
+      const roomDetails = await axios.post(`http://localhost:3100/api/v1/user/joinroom?slug=${room}`, {} , {headers:{token:localStorage.getItem("token")}});
       console.log("Room joined", roomDetails);
       router.push(`/chat/${room}`);
   }

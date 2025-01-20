@@ -24,9 +24,9 @@ class UserServices{
         } 
      }
 
-     async JoinRoom(token:any){
+     async JoinRoom(token:any, slug:any){
         try {
-           const response = await userRepository.JoinRoom(token);
+           const response = await userRepository.JoinRoom(token, slug);
            return response;
         } catch (error) {
           console.log("Eoor has occured at user controller");
